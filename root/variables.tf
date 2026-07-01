@@ -16,18 +16,47 @@ variable "tags" {
 }
 
 # VNET Variable
-variable "address_space" {
+variable "ea_vnet1_address_space" {
   type        = list(string)
-  description = "VNet address space"
+  description = "EA VNet address space"
 }
 
-variable "address_prefixes_1" {
+variable "ea_vnet2_address_space" {
+  type        = list(string)
+  description = "EA VNet address space"
+}
+
+variable "ae_vnet1_address_space" {
+  type        = list(string)
+  description = "AE VNet address space"
+}
+
+variable "ea_vnet1_address_prefixes_1" {
   type        = list(string)
   description = "address space for subnet 1"
 }
 
-variable "address_prefixes_2" {
+variable "ea_vnet1_address_prefixes_2" {
   type        = list(string)
   description = "address space for subnet 2"
 }
 
+variable "ea_vnet2_address_prefixes_1" {
+  type        = list(string)
+  description = "address space for subnet 1"
+}
+
+variable "ea_vnet2_address_prefixes_2" {
+  type        = list(string)
+  description = "address space for subnet 2"
+}
+
+variable "ae_vnet1_address_prefixes_1" {
+  type        = list(string)
+  description = "address space for subnet 1"
+}
+
+variable "ae_vnet1_address_prefixes_2" {
+  type        = list(string)
+  description = "address space for subnet 2"
+}
