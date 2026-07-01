@@ -1,0 +1,56 @@
+name: Terraform PRD Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "env/prd/**"
+      - "root/**"
+      - "module/**"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-prd:
+    runs-on: ubuntu-latest
+    environment: PRD
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_USE_OIDC: true
+    defaults:
+      run:
+        working-directory: env/prd
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (PRD)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (PRD)
+        run: terraform init
+
+        # Checks that all Terraform configuration files adhere to a canonical format
+      - name: Terraform Format
+        run: terraform fmt # -check
+
+      - name: Terraform Validate (PRD)
+        run: terraform validate
+
+      - name: Terraform Plan (PRD)
+        run: terraform plan -no-color
+
+      - name: Terraform Apply (PRD)
+        run: terraform apply -auto-approve
